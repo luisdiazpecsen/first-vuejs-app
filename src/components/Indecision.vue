@@ -34,24 +34,31 @@ export default {
     },
     methods: {
         async getAnswer() {
-            this.answer = "Thinking..."
+            try {
+                this.answer = "Thinking..."
 
-            // FETCH
-            const { answer, image } = await fetch("https://yesno.wtf/api").then(
-                (r) => r.json()
-            )
+                // FETCH
+                const { answer, image } = await fetch(
+                    "https://yesno.wtf/api"
+                ).then((r) => r.json())
 
-            // AXIOS
-            // const { data } = await axios.get("https://yesno.wtf/api"),
-            //     { answer, image } = data
+                // AXIOS
+                // const { data } = await axios.get("https://yesno.wtf/api"),
+                //     { answer, image } = data
 
-            this.answer = ANSWERS[answer] || ANSWERS.idk
-            this.img = image
+                this.answer = ANSWERS[answer] || ANSWERS.idk
+                this.img = image
+            } catch (error) {
+                console.log("IndecisionComponent: ", error)
+                this.answer = "API couldn't be loaded"
+                this.img = null
+            }
         },
     },
     watch: {
         question: function (value, oldValue) {
             this.isValidQuestion = false
+            console.log({ value })
 
             if (!value.includes("?")) return
 
